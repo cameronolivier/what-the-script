@@ -76,7 +76,7 @@ npm run install-global
 
 ## Best Practices
 
-- **Command Organization**: Place core commands in `src/commands/`. Use descriptive names for your files to ensure clarity (e.g., `branch.ts` for branch-related commands).
+- **Command Organization**: Place core commands in `src/commands/`. Use descriptive names for your files to ensure clarity (e.g., `example.ts` for branch-related commands).
 - **Utilities**: Keep reusable utility functions in `src/utils/`. This promotes modularity and helps keep your command functions clean.
 - **Prettier & ESLint**: Before committing your code, always run `npm run format` to ensure consistent code style.
 
