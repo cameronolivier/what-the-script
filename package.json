@@ -1,15 +1,15 @@
 {
-  "name": "cli-boilerplate",
+  "name": "what-the-script",
   "version": "0.1.0",
-  "description": "A CLI Boilerplate for quickly scaffolding CLI tools",
+  "description": "A small utility that prints all the scripts for a given project.",
   "keywords": [],
   "author": "Cameron Olivier <cameronolivier@gmail.com> (https://olvr.cc)",
   "bugs": {
-    "url": "https://github.com/cameronolivier/cli-boilerplate/issues"
+    "url": "https://github.com/cameronolivier/what-the-script/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cameronolivier/cli-boilerplate.git"
+    "url": "git+https://github.com/cameronolivier/what-the-script.git"
   },
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,8 @@
     "dist"
   ],
   "bin": {
-    "my-cli": "dist/index.js"
+    "what-the-script": "dist/index.js",
+    "wts": "dist/index.js"
   },
   "scripts": {
     "git:pre-commit": "lint-staged",
@@ -43,6 +44,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.1.0",
     "chalk": "^5.0.0",
     "commander": "^12.1.0",
     "fuzzy": "^0.1.3",
