@@ -5,6 +5,8 @@ import path from 'path';
 import { checkbox } from '@inquirer/prompts';
 import chalk from 'chalk';
 
+import { determinePackageManager } from '../utils/packageManagers.utils.js';
+
 export async function listScripts(): Promise<void> {
   try {
     // Read package.json in the current directory
@@ -66,22 +68,6 @@ export async function listScripts(): Promise<void> {
   } catch (error) {
     console.error(chalk.red('An error occurred:'), error);
   }
-}
-
-// Function to determine the package manager based on lock files
-function determinePackageManager(): string {
-  const cwd = process.cwd();
-
-  if (fs.existsSync(path.join(cwd, 'yarn.lock'))) {
-    return 'yarn';
-  }
-
-  if (fs.existsSync(path.join(cwd, 'pnpm-lock.yaml'))) {
-    return 'pnpm';
-  }
-
-  // Default to npm if no specific lock file is found
-  return 'npm';
 }
 
 async function runScript(name: string, packageManager: string): Promise<void> {
