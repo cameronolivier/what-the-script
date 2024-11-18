@@ -52,21 +52,49 @@ export async function listScripts(): Promise<void> {
       return;
     }
 
+    // Determine the package manager
+    const packageManager = determinePackageManager();
+
     // Run the selected script
     const scriptToRun = selectedScripts[0] as string;
-    console.log(chalk.cyan(`\nRunning script: ${scriptToRun}...\n`));
-    await runScript(scriptToRun);
+    console.log(
+      chalk.cyan(
+        `\nRunning script: ${scriptToRun} using ${packageManager}...\n`,
+      ),
+    );
+    await runScript(scriptToRun, packageManager);
   } catch (error) {
     console.error(chalk.red('An error occurred:'), error);
   }
 }
 
-async function runScript(name: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    // Prepend "npm run" to ensure the script is executed correctly
-    const npmCommand = `npm run ${name}`;
+// Function to determine the package manager based on lock files
+function determinePackageManager(): string {
+  const cwd = process.cwd();
 
-    const process = exec(npmCommand, (error, stdout, stderr) => {
+  if (fs.existsSync(path.join(cwd, 'yarn.lock'))) {
+    return 'yarn';
+  }
+
+  if (fs.existsSync(path.join(cwd, 'pnpm-lock.yaml'))) {
+    return 'pnpm';
+  }
+
+  // Default to npm if no specific lock file is found
+  return 'npm';
+}
+
+async function runScript(name: string, packageManager: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    // Choose the correct command based on the package manager
+    const command =
+      packageManager === 'yarn'
+        ? `yarn ${name}`
+        : packageManager === 'pnpm'
+          ? `pnpm run ${name}`
+          : `npm run ${name}`;
+
+    const process = exec(command, (error, stdout, stderr) => {
       if (error) {
         console.error(chalk.red(`Error running script "${name}":`), stderr);
         reject(error);
