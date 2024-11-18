@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-import { checkbox, Separator } from '@inquirer/prompts';
+import { checkbox } from '@inquirer/prompts';
 import chalk from 'chalk';
 
 export async function listScripts(): Promise<void> {
@@ -22,20 +22,21 @@ export async function listScripts(): Promise<void> {
       return;
     }
 
-    // Prepare the scripts as options for inquirer
+    // Prepare the scripts as options for the checkbox prompt
     const scriptChoices = Object.keys(scripts).map((script) => ({
-      name: `${script}: ${chalk.green(scripts[script])}`,
+      name: script,
       value: script,
+      message: `${script}: ${chalk.green(scripts[script])}`,
     }));
 
-    // Prompt the user with a list of scripts to select
+    // Use the new @inquirer/prompts checkbox to prompt the user
     const selectedScripts = await checkbox({
       message: 'Available Scripts:',
       loop: false,
       pageSize: 50,
       instructions:
-        '(Press <space> to select, and <enter> to proceed. Press <enter> without' +
-        ' selecting any script to exit.)',
+        `(Press ${chalk.cyan('<space>')} to select and ${chalk.cyan('<enter>')} to proceed. Press ${chalk.cyan('<enter>')} without selecting any ` +
+        'script to exit.)',
       choices: scriptChoices,
       validate: (answer) => {
         if (answer.length > 1) {
@@ -45,6 +46,7 @@ export async function listScripts(): Promise<void> {
       },
     });
 
+    // Handle when no script is selected
     if (selectedScripts.length === 0) {
       console.log(chalk.blue('No script selected. Exiting...'));
       return;
@@ -53,15 +55,18 @@ export async function listScripts(): Promise<void> {
     // Run the selected script
     const scriptToRun = selectedScripts[0] as string;
     console.log(chalk.cyan(`\nRunning script: ${scriptToRun}...\n`));
-    await runScript(scriptToRun, scripts[scriptToRun]);
+    await runScript(scriptToRun);
   } catch (error) {
     console.error(chalk.red('An error occurred:'), error);
   }
 }
 
-async function runScript(name: string, command: string): Promise<void> {
+async function runScript(name: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const process = exec(command, (error, stdout, stderr) => {
+    // Prepend "npm run" to ensure the script is executed correctly
+    const npmCommand = `npm run ${name}`;
+
+    const process = exec(npmCommand, (error, stdout, stderr) => {
       if (error) {
         console.error(chalk.red(`Error running script "${name}":`), stderr);
         reject(error);
