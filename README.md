@@ -31,20 +31,87 @@ cli-boilerplate/
 
 ## Getting Started
 
-1. **Clone the Repository**
+You'll want to clone and then detach this from the boilerplate repository, and make a few adjustments to make it
+your own.
 
-   ```bash
-   git clone <https://github.com/cameronolivier/cli-boilerplate> <your project name>
-   cd <your project name>
-   ```
+Follow these steps:
 
-2. **Install Dependencies**
+### 1. **Clone the Boilerplate Repo**
+
+Clone your boilerplate repository as usual:
+
+```bash
+git clone <boilerplate-repo-url> <new-project-name>
+cd <new-project-name>
+```
+
+### 2. **Remove the Old Remote**
+
+Check the current remote to ensure you're connected to the boilerplate repo:
+
+```bash
+git remote -v
+```
+
+Remove the remote connection:
+
+```bash
+git remote remove origin
+```
+
+### 3. **Create a New Repo**
+
+On your Git hosting service (e.g., GitHub, GitLab, etc.), create a new repository for your project. Note the new repository's URL.
+If you use the github CLI you can simply do:
+
+```bash
+gh repo create <new-project-name> --public
+```
+
+### 4. **Add the New Remote**
+
+Add the newly created repository as the remote `origin`:
+
+```bash
+git remote add origin <new-repo-url>
+```
+
+Verify the remote has been updated:
+
+```bash
+git remote -v
+```
+
+### 5. **Push the Code to the New Repo**
+
+Push your code to the new repository:
+
+```bash
+git push -u origin main
+```
+
+Replace `main` with your branch name if it’s different.
+
+### 6. **Confirm Setup**
+
+After the push, your local repository is now linked to the new remote. Any future commits can be pushed to the new repository without affecting the boilerplate repo.
+
+### 7. **Confirm Setup**
+
+Adjust the `package.json` file to reflect your project's details. Update the `name`, `description`, `author`, and `repository` fields to match your project.
+Rename `my-cli` in the `bin` field to your desired command name.
+
+And I think that's it! Happy Coding 🚀
+
+## How to Build:
+
+1. **Install Dependencies**
 
    ```bash
    npm install
    ```
 
-3. **Start Development**
+2. **Start Development**
 
    ```bash
    npm run dev
@@ -53,20 +120,22 @@ cli-boilerplate/
    - This runs the CLI using `tsup` in watch mode, allowing you to develop and test your commands without needing to
      rebuild.
 
-4. **Build the Project**
+3**Build the Project**
 
-   ```bash
-   npm run build
-   ```
+```bash
+npm run build
+```
 
-   - This will compile your TypeScript code to JavaScript in the `dist` directory.
+- This will compile your TypeScript code to JavaScript in the `dist` directory.
 
-5. **Link Locally**
-   ```bash
-   npm link
-   ```
-   - This allows you to use the command globally as `my-cli` while still making changes locally.
-6. **Install Locally**
+4**Link Locally**
+
+```bash
+npm link
+```
+
+- This allows you to use the command globally as `my-cli` while still making changes locally.
+  5**Install Locally**
 
 ```bash
 npm run install-global
